@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.2.3.RELEASE'
+        springBootVersion = '1.2.5.RELEASE'
     }
     repositories {
         jcenter()
@@ -10,9 +10,10 @@ buildscript {
 
     }
     dependencies {
-        classpath('com.github.jengelman.gradle.plugins:gradle-processes:0.3.0')
+        //classpath('com.github.jengelman.gradle.plugins:gradle-processes:0.3.0')
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath 'au.com.dius:pact-jvm-provider-gradle_2.11:2.1.13'
+        //classpath 'au.com.dius:pact-jvm-provider-gradle_2.11:2.1.13'
+        classpath 'io.codearte.accurest:accurest-gradle-plugin:0.8.1'
     }
 }
 
@@ -40,6 +41,7 @@ allprojects {
 
 subprojects {
     apply plugin: 'spring-boot'
+    apply plugin: 'groovy'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -47,8 +49,10 @@ subprojects {
     dependencies {
         compile("org.springframework.boot:spring-boot-starter-web")
         testCompile("org.springframework.boot:spring-boot-starter-test")
-        testCompile("au.com.dius:pact-jvm-consumer-junit_2.11:2.1.13")
+
+        //testCompile("au.com.dius:pact-jvm-consumer-junit_2.11:2.1.13")
     }
+
 }
 
 project(':microservices-pact-consumer') {
@@ -63,7 +67,26 @@ project(':microservices-pact-consumer') {
 
 
 project(':microservices-pact-provider') {
-    apply plugin: 'au.com.dius.pact'
+    apply plugin: 'groovy'
+    apply plugin: 'accurest'
+
+    accurest {
+        testMode = 'MockMvc'
+        baseClassForTests = 'io.pivotal.microservices.pact.provider.BaseMockMvcSpec'
+        basePackageForTests = 'io.pivotal.microservices.pact.provider'
+        contractsDslDir = new File("$projectDir/src/test/resources/stubs")
+        //stubsOutputDir = new File("${project.buildDir}/production/${project.name}-stubs/mappings/")
+        stubsOutputDir = file("${project.buildDir}/generated-sources/accurest-stubs")
+    }
+
+    dependencies {
+        testCompile 'io.codearte.accurest:accurest-core:0.8.1'
+        testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+        testCompile 'com.jayway.restassured:rest-assured:2.4.0'
+        testCompile 'com.jayway.restassured:spring-mock-mvc:2.4.0' // needed if you're going to use Spring MockMvc
+    }
+    test.dependsOn { [generateAccurest, generateWireMockClientStubs] } //See: https://github.com/Codearte/accurest/issues/36
+    /*apply plugin: 'au.com.dius.pact'
     apply plugin: 'com.github.johnrengelman.processes'
 
     ext {
@@ -81,7 +104,7 @@ project(':microservices-pact-provider') {
 
     task stopProvider << {
         startProvider.processHandle.abort()
-    }
+    }*/
 
     jar {
         baseName = 'microservices-pact-provider'
@@ -91,7 +114,7 @@ project(':microservices-pact-provider') {
         version = new File('number').text.trim()
     }
 
-    pact {
+    /*pact {
         serviceProviders {
             fooProvider {
                 startProviderTask = 'startProvider'
@@ -101,7 +124,7 @@ project(':microservices-pact-provider') {
                 }
             }
         }
-    }
+    }*/
 }
 
 task wrapper(type: Wrapper) {
