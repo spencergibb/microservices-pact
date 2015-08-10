@@ -27,7 +27,7 @@ allprojects {
     }
 
     task loadVersion {
-        ext.myVersion = new File('number').text
+        ext.myVersion = new File('number').text.trim()
     }
 
     task manifestFilter(type: Copy) {
@@ -57,7 +57,7 @@ project(':microservices-pact-consumer') {
     }
 
     jar.doFirst {
-        version = new File('number').text
+        version = new File('number').text.trim()
     }
 }
 
@@ -88,7 +88,7 @@ project(':microservices-pact-provider') {
     }
 
     jar.doFirst {
-        version = new File('number').text
+        version = new File('number').text.trim()
     }
 
     pact {

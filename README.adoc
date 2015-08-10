@@ -55,6 +55,12 @@ $ gradle test
 +
 By virtue of the fact that these tests pass, we know that the `microservices-pact-consumer` app interacts appropriately with the contract as defined in link:microservices-pact-consumer/src/test/java/io/pivotal/microservices/pact/consumer/ConsumerPortTest.java[ConsumerPortTest.java].
 
+. Set the `PACT_FILE` environment variable
++
+----
+$ export PACT_FILE=./microservices-pact-consumer/target/pacts/Foo_Consumer-Foo_Provider.json
+----
+
 . Next, we want to verify that the `microservices-pact-provider` app actually provides the expected contract. First, build the apps:
 +
 ----
