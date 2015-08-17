@@ -1,0 +1,10 @@
+#producer-url=http://foo-provider.cfapps.io
+server:
+  port: 8081
+spring:
+  application.name: fooconsumer
+  cloud.zookeeper.dependencies:
+    fooprovider:
+      #path: /sample/provider
+      path: /fooprovider
+      required: true
