@@ -9,6 +9,6 @@ import spock.lang.Specification
 abstract class BaseMockMvcSpec extends Specification {
 
     def setup() {
-        RestAssuredMockMvc.standaloneSetup(new Application())
+        RestAssuredMockMvc.standaloneSetup(new ProviderApplication())
     }
 }

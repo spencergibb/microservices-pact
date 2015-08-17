@@ -1,20 +1,18 @@
 package sample.consumer;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
-@Configuration
-@ComponentScan
-@EnableAutoConfiguration
+@SpringBootApplication
+@EnableDiscoveryClient
 @RestController
-public class Application {
+public class ConsumerApplication {
 
     @Autowired
     ConsumerPort consumerPort;
@@ -30,6 +28,6 @@ public class Application {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(ConsumerApplication.class, args);
     }
 }

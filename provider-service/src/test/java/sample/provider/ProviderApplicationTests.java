@@ -7,9 +7,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ProviderApplication.class)
 @WebAppConfiguration
-public class ApplicationTests {
+public class ProviderApplicationTests {
 
     @Test
     public void contextLoads() {
