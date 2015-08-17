@@ -35,6 +35,7 @@ allprojects {
         maven { url "https://repo.spring.io/milestone" }
     }
 
+
     task loadVersion {
         ext.myVersion = new File('number').text.trim()
     }
@@ -50,10 +51,61 @@ allprojects {
 subprojects {
     apply plugin: 'spring-boot'
     apply plugin: 'groovy'
+    apply plugin: 'maven-publish'
+    apply plugin: 'accurest'
+
+    group = 'sample'
+    version = new File('number').text.trim()
+
+    ext {
+        contractsDir = new File("$projectDir/src/test/resources/stubs")
+        wiremockStubsOutputDirRoot = file("${project.buildDir}/generated-sources/${project.name}-stubs")
+        wiremockStubsOutputDir = new File(wiremockStubsOutputDirRoot, "mappings")
+    }
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    task stubsJar(type: Jar, dependsOn: ["generateAccurest", "generateWiremockClientStubs"]) {
+        baseName = "${project.name}-stubs"
+        from wiremockStubsOutputDirRoot
+    }
+
+    artifacts {
+        archives sourcesJar
+        archives javadocJar
+        archives stubsJar
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.java
+
+                artifact sourcesJar {
+                    classifier "sources"
+                }
+
+                artifact javadocJar {
+                    classifier "javadoc"
+                }
+
+                artifact stubsJar {
+                    classifier "stubs"
+                }
+            }
+        }
+    }
     dependencies {
         compile("org.springframework.boot:spring-boot-starter-web")
         compile("org.springframework.cloud:spring-cloud-starter-zookeeper-discovery:1.0.0.BUILD-SNAPSHOT")
@@ -67,6 +119,15 @@ project(':consumer-service') {
         baseName = 'consumer-service'
     }
 
+    accurest {
+        testMode = 'MockMvc'
+        //baseClassForTests = 'sample.provider.BaseMockMvcSpec'
+        basePackageForTests = 'sample.consumer'
+        contractsDslDir = contractsDir
+        //stubsOutputDir = new File("${project.buildDir}/production/${project.name}-stubs/mappings/")
+        stubsOutputDir = wiremockStubsOutputDir
+    }
+
     jar.doFirst {
         version = new File('number').text.trim()
     }
@@ -75,15 +136,15 @@ project(':consumer-service') {
 
 project(':provider-service') {
     apply plugin: 'groovy'
-    apply plugin: 'accurest'
+
 
     accurest {
         testMode = 'MockMvc'
         baseClassForTests = 'sample.provider.BaseMockMvcSpec'
         basePackageForTests = 'sample.provider'
-        contractsDslDir = new File("$projectDir/src/test/resources/stubs")
+        contractsDslDir = contractsDir
         //stubsOutputDir = new File("${project.buildDir}/production/${project.name}-stubs/mappings/")
-        stubsOutputDir = file("${project.buildDir}/generated-sources/accurest-stubs")
+        stubsOutputDir = wiremockStubsOutputDir
     }
 
     dependencies {
