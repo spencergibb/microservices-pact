@@ -10,9 +10,7 @@ buildscript {
 
     }
     dependencies {
-        //classpath('com.github.jengelman.gradle.plugins:gradle-processes:0.3.0')
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        //classpath 'au.com.dius:pact-jvm-provider-gradle_2.11:2.1.13'
         classpath 'io.codearte.accurest:accurest-gradle-plugin:0.8.1'
     }
 }
@@ -49,15 +47,13 @@ subprojects {
     dependencies {
         compile("org.springframework.boot:spring-boot-starter-web")
         testCompile("org.springframework.boot:spring-boot-starter-test")
-
-        //testCompile("au.com.dius:pact-jvm-consumer-junit_2.11:2.1.13")
     }
 
 }
 
-project(':microservices-pact-consumer') {
+project(':consumer-service') {
     jar {
-        baseName = 'microservices-pact-consumer'
+        baseName = 'consumer-service'
     }
 
     jar.doFirst {
@@ -66,14 +62,14 @@ project(':microservices-pact-consumer') {
 }
 
 
-project(':microservices-pact-provider') {
+project(':provider-service') {
     apply plugin: 'groovy'
     apply plugin: 'accurest'
 
     accurest {
         testMode = 'MockMvc'
-        baseClassForTests = 'io.pivotal.microservices.pact.provider.BaseMockMvcSpec'
-        basePackageForTests = 'io.pivotal.microservices.pact.provider'
+        baseClassForTests = 'sample.provider.BaseMockMvcSpec'
+        basePackageForTests = 'sample.provider'
         contractsDslDir = new File("$projectDir/src/test/resources/stubs")
         //stubsOutputDir = new File("${project.buildDir}/production/${project.name}-stubs/mappings/")
         stubsOutputDir = file("${project.buildDir}/generated-sources/accurest-stubs")
@@ -86,45 +82,14 @@ project(':microservices-pact-provider') {
         testCompile 'com.jayway.restassured:spring-mock-mvc:2.4.0' // needed if you're going to use Spring MockMvc
     }
     test.dependsOn { [generateAccurest, generateWireMockClientStubs] } //See: https://github.com/Codearte/accurest/issues/36
-    /*apply plugin: 'au.com.dius.pact'
-    apply plugin: 'com.github.johnrengelman.processes'
-
-    ext {
-        pactFilePath = "$System.env.PACT_FILE"
-    }
-
-    task startProvider(type: com.github.jengelman.gradle.plugins.processes.tasks.JavaFork) {
-        classpath = files("microservices-pact-provider/build/libs/microservices-pact-provider-${version}.jar")
-        classpath += sourceSets.main.runtimeClasspath
-        main = 'io.pivotal.microservices.pact.provider.Application'
-        doLast {
-            Thread.sleep(10000)
-        }
-    }
-
-    task stopProvider << {
-        startProvider.processHandle.abort()
-    }*/
 
     jar {
-        baseName = 'microservices-pact-provider'
+        baseName = 'provider-service'
     }
 
     jar.doFirst {
         version = new File('number').text.trim()
     }
-
-    /*pact {
-        serviceProviders {
-            fooProvider {
-                startProviderTask = 'startProvider'
-                terminateProviderTask = 'stopProvider'
-                hasPactWith('fooConsumer') {
-                    pactFile = file(pactFilePath)
-                }
-            }
-        }
-    }*/
 }
 
 task wrapper(type: Wrapper) {

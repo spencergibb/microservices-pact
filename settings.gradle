@@ -1,1 +1,1 @@
-include "microservices-pact-consumer", "microservices-pact-provider"
+include "consumer-service", "provider-service"
