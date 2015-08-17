@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ConsumerApplication {
 
     @Autowired
-    ConsumerPort consumerPort;
+	ConsumerService consumerService;
 
     @RequestMapping("/foos")
     public List<Foo> foos() {
-        return consumerPort.foos();
+        return consumerService.foos();
     }
 
     @RequestMapping("/")

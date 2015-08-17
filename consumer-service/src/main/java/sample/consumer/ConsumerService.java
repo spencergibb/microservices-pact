@@ -10,15 +10,14 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Component
-public class ConsumerPort {
+public class ConsumerService {
 
+	@Value("${producer-url:http://fooprovider}")
     private String url;
-    private RestTemplate restTemplate;
+	@Autowired(required = false)
+    private RestTemplate restTemplate = new RestTemplate();
 
-    @Autowired
-    public ConsumerPort(@Value("${producer}") String url) {
-        this.url = url;
-        this.restTemplate = new RestTemplate();
+    public ConsumerService() {
     }
 
     public List<Foo> foos() {
