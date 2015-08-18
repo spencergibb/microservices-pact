@@ -2,9 +2,15 @@
 server:
   port: 8081
 spring:
-  application.name: fooconsumer
+  application.name: /sample/fooconsumer
   cloud.zookeeper.dependencies:
     fooprovider:
-      #path: /sample/provider
-      path: /fooprovider
-      required: true
+      path: sample/fooprovider
+#      path: fooprovider
+
+stubrunner:
+  work-offline: true
+  use-microservice-definitions: true
+#  use-microservice-definitions: false
+#  stubs-group: sample
+#  stubs-module: provider-service

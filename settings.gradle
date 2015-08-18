@@ -1,1 +1,1 @@
-include "consumer-service", "provider-service"
+include "consumer-service", "fooprovider"

@@ -99,16 +99,18 @@ subprojects {
                 artifact javadocJar {
                     classifier "javadoc"
                 }
-
-                artifact stubsJar {
-                    classifier "stubs"
-                }
+            }
+            stubs(MavenPublication) {
+                artifactId "${project.name}-stubs"
+                artifact stubsJar
             }
         }
     }
     dependencies {
         compile("org.springframework.boot:spring-boot-starter-web")
+        compile("org.springframework.boot:spring-boot-starter-actuator")
         compile("org.springframework.cloud:spring-cloud-starter-zookeeper-discovery:1.0.0.BUILD-SNAPSHOT")
+        compile 'org.projectlombok:lombok:1.16.4'
         testCompile("org.springframework.boot:spring-boot-starter-test")
     }
 
@@ -131,12 +133,16 @@ project(':consumer-service') {
     jar.doFirst {
         version = new File('number').text.trim()
     }
+
+    dependencies {
+        compile "com.ofg:stub-runner-spring:0.9.4-SNAPSHOT"
+        compile "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
+    }
 }
 
 
-project(':provider-service') {
+project(':fooprovider') {
     apply plugin: 'groovy'
-
 
     accurest {
         testMode = 'MockMvc'
@@ -155,13 +161,6 @@ project(':provider-service') {
     }
     test.dependsOn { [generateAccurest, generateWireMockClientStubs] } //See: https://github.com/Codearte/accurest/issues/36
 
-    jar {
-        baseName = 'provider-service'
-    }
-
-    jar.doFirst {
-        version = new File('number').text.trim()
-    }
 }
 
 task wrapper(type: Wrapper) {

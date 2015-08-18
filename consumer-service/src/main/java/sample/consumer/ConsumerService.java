@@ -24,4 +24,8 @@ public class ConsumerService {
         ParameterizedTypeReference<List<Foo>> responseType = new ParameterizedTypeReference<List<Foo>>() {};
         return restTemplate.exchange(url + "/foos", HttpMethod.GET, null, responseType).getBody();
     }
+
+	public Foo foo() {
+		return restTemplate.getForObject(url + "/foo", Foo.class);
+	}
 }
