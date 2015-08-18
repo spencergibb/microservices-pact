@@ -116,9 +116,9 @@ subprojects {
 
 }
 
-project(':consumer-service') {
+project(':fooconsumer') {
     jar {
-        baseName = 'consumer-service'
+        baseName = 'fooconsumer'
     }
 
     accurest {
@@ -128,10 +128,6 @@ project(':consumer-service') {
         contractsDslDir = contractsDir
         //stubsOutputDir = new File("${project.buildDir}/production/${project.name}-stubs/mappings/")
         stubsOutputDir = wiremockStubsOutputDir
-    }
-
-    jar.doFirst {
-        version = new File('number').text.trim()
     }
 
     dependencies {

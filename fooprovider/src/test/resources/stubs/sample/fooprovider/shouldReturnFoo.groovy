@@ -12,10 +12,6 @@ GroovyDsl groovyDsl = GroovyDsl.make {
         headers {
             header 'Content-Type' : 'application/json;charset=UTF-8'
         }
-        /*body(
-            { value : 42 },
-            { value : 100 }
-        )*/
-        body '''{ "value" : 43 }'''
+        body '''{ "value" : 42 }'''
     }
 }

@@ -15,9 +15,9 @@ GroovyDsl groovyDsl = GroovyDsl.make {
             { value : 100 }
         )*/
         body ''' [{
-        "value" : 43
+        "value" : 42
       }, {
-        "value" : 101
+        "value" : 100
       } ]'''
     }
 }
