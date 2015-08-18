@@ -10,6 +10,7 @@ Testing is achieved using https://github.com/Codearte/accurest[AccuREST].
 
 == Running the Demo
 
+0. grab https://github.com/4finance/micro-infra-spring/tree/tech/migration-to-spring-cloud-zookeeper[micro-infra-spring] migration branch and `./gradlew clean build publishToMavenLocal -x test`
 1. `./gradlew clean build`
 2. Look at `fooprovider/build/generated-sources/accurest/sample/provider/FooproviderSpec.groovy` to see the accurest generated test.
 3. Look at `fooprovider/build/generated-sources/fooprovider-stubs/mappings/sample/fooprovider/shouldReturnFoo*.json` to see the accurest generated stubs.
