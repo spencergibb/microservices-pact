@@ -2,10 +2,33 @@
 Spencer Gibb
 
 This project contains a *very simple* demo of using http://martinfowler.com/articles/consumerDrivenContracts.html[consumer-driven contracts] to verify the interactions between microservices.
-It leverages http://projects.spring.io/spring-boot[Spring Boot] for both the provider and consumer services.
+It leverages http://projects.spring.io/spring-boot[Spring Boot]  and https://github.com/spring-cloud/spring-cloud-zookeeper[Spring Cloud Zookeeper] for both the provider and consumer services.
 
-Testing is achieved using TODO: what is used
+This project was originally https://github.com/mstine[@mstine]'s https://github.com/mstine/microservices-pact[microservices-pact] project.
+
+Testing is achieved using https://github.com/Codearte/accurest[AccuREST].
 
 == Running the Demo
 
-TODO: steps to run the demo
+1. `./gradlew clean build`
+2. Look at `fooprovider/build/generated-sources/accurest/sample/provider/FooproviderSpec.groovy` to see the accurest generated test.
+3. Look at `fooprovider/build/generated-sources/fooprovider-stubs/mappings/sample/fooprovider/shouldReturnFoo*.json` to see the accurest generated stubs.
+4. `./gradlew publishToMavenLocal -x test` this publishes the stubs to your local maven repository
+5. Run zookeeper (for now, option to run embedded). For those on a mac, `brew install zookeeper`, then `zkServer start`.
+6. Run `java -jar fooconsumer/build/libs/fooconsumer-0.0.1-SNAPSHOT.jar --stubrunner.enabled=true`
+ * should see something like `2015-08-18 15:46:59.192  INFO 79118 --- [           main] com.ofg.stub.server.StubServer           : Started stub server for project sample/fooprovider on port 10057`
+7. Browse to http://localhost:8081/foos to see the service running using stubs located via Service Discovery
+
+== Interesting files
+
+* https://github.com/spencergibb/spring-cloud-dependencies-sample/blob/master/build.gradle[`build.gradle`]: look for 'stubs' and 'accurest' configuration.
+* https://github.com/spencergibb/spring-cloud-dependencies-sample/tree/master/fooprovider/src/test/resources/stubs/sample/fooprovider[fooprovider accurest groovy stubs]: where the generated files come from.
+* https://github.com/spencergibb/spring-cloud-dependencies-sample/blob/master/fooconsumer/src/main/resources/application.yml[fooconsumer `application.yml`]: configuration for dependencies (from https://github.com/4finance/micro-infra-spring[4finance]) and stubrunner.
+
+
+== TODO
+
+[ ] embed zookeeper
+[ ] move stubrunner to spring cloud
+[ ] use spring restdocs to generate stubs
+[ ] build plugins to create stub jar (to many moving parts right now).
