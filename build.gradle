@@ -63,6 +63,9 @@ subprojects {
         wiremockStubsOutputDir = new File(wiremockStubsOutputDirRoot, "mappings")
     }
 
+    //don't repackage the stubs jar
+    bootRepackage.withJarTask = jar
+
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
