@@ -29,7 +29,7 @@ Testing is achieved using https://github.com/Codearte/accurest[AccuREST].
 
 == TODO
 
-[ ] embed zookeeper
-[ ] move stubrunner to spring cloud
-[ ] use spring restdocs to generate stubs
-[ ] build plugins to create stub jar (to many moving parts right now).
+- [ ] embed zookeeper
+- [ ] move stubrunner to spring cloud
+- [ ] use spring restdocs to generate stubs
+- [ ] build plugins to create stub jar (to many moving parts right now).
