@@ -11,12 +11,15 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.zookeeper.ZookeeperProperties;
 import org.springframework.cloud.zookeeper.discovery.ZookeeperDiscoveryProperties;
 import org.springframework.cloud.zookeeper.discovery.dependency.ZookeeperDependencies;
-import org.springframework.cloud.zookeeper.discovery.dependency.ZookeeperDependencies.ZookeeperDependency;
+import org.springframework.cloud.zookeeper.discovery.dependency.ZookeeperDependency;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import com.ofg.infrastructure.discovery.MicroserviceConfigurationNotPresentException;
-import com.ofg.stub.*;
-import org.springframework.context.annotation.Configuration;
+import com.ofg.stub.BatchStubRunnerFactory;
+import com.ofg.stub.Collaborators;
+import com.ofg.stub.StubRunnerOptions;
+import com.ofg.stub.StubRunning;
 
 /**
  * @author Spencer Gibb
