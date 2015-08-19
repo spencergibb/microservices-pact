@@ -1,16 +1,12 @@
-#producer-url=http://foo-provider.cfapps.io
 server:
   port: 8081
 spring:
-  application.name: /sample/fooconsumer
-  cloud.zookeeper.dependencies:
-    fooprovider:
-      path: sample/fooprovider
-#      path: fooprovider
+  application.name: fooconsumer
+  cloud.zookeeper:
+    prefix: sample
+    dependencies:
+      fooprovider: ~
 
 stubrunner:
   work-offline: true
   use-microservice-definitions: true
-#  use-microservice-definitions: false
-#  stubs-group: sample
-#  stubs-module: provider-service
