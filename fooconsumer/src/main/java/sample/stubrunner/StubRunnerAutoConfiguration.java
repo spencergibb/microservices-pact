@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.curator.test.TestingServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -26,18 +27,18 @@ import com.ofg.stub.StubRunning;
  */
 @Configuration
 @EnableConfigurationProperties
-@ConditionalOnProperty(value = "stubrunner.enabled")
+@ConditionalOnProperty("stubrunner.enabled")
 @ConditionalOnClass(BatchStubRunnerFactory.class)
 public class StubRunnerAutoConfiguration {
 
 	@Autowired(required = false)
 	private ZookeeperDependencies zookeeperDependencies;
-			
+
 	@Autowired(required = false)
 	private ZookeeperDiscoveryProperties zookeeperDiscoveryProperties;
-	
-	@Autowired
-	private ZookeeperProperties zookeeperProperties;
+
+	@Autowired(required = false)
+	private TestingServer testingServer;
 
 	@Bean
 	public StubRunnerProperties stubRunnerProperties() {
@@ -45,17 +46,34 @@ public class StubRunnerAutoConfiguration {
 	}
 
 	@Bean(initMethod = "runStubs", destroyMethod = "close")
-	StubRunning batchStubRunner(StubRunnerProperties properties) {
+	public StubRunning batchStubRunner(StubRunnerProperties properties,
+			ZookeeperProperties zkProperties) {
 		checkIfConfigurationIsPresent();
-		boolean shouldWorkOnline = isPropertySetToWorkOnline(properties.isWorkOffline(), properties.isSkipLocalRepo());
-		String connectString = zookeeperProperties.getConnectString();
-		String[] parts = connectString.split(":");
-		int port = Integer.parseInt(parts[1]);
-		StubRunnerOptions stubRunnerOptions = new StubRunnerOptions(properties.getMinPortValue(), properties.getMaxPortValue(), properties.getStubRepositoryRoot(), properties.getStubsGroup(), properties.getStubsModule(), shouldWorkOnline,
-				properties.isUseMicroserviceDefinitions(), connectString, port, properties.getStubsSuffix(), properties.isWaitForService(), properties.getWaitTimeout());
+		boolean shouldWorkOnline = isPropertySetToWorkOnline(properties.isWorkOffline(),
+				properties.isSkipLocalRepo());
+
+		int port;
+		String connectString;
+		if (testingServer == null) {
+			connectString = zkProperties.getConnectString();
+			String[] parts = connectString.split(":");
+			port = Integer.parseInt(parts[1]);
+		} else {
+			connectString = testingServer.getConnectString();
+			port = testingServer.getPort();
+		}
+
+		StubRunnerOptions stubRunnerOptions = new StubRunnerOptions(
+				properties.getMinPortValue(), properties.getMaxPortValue(),
+				properties.getStubRepositoryRoot(), properties.getStubsGroup(),
+				properties.getStubsModule(), shouldWorkOnline,
+				properties.isUseMicroserviceDefinitions(), connectString, port,
+				properties.getStubsSuffix(), properties.isWaitForService(),
+				properties.getWaitTimeout());
 		List<String> dependenciesPath = getDependenciesPaths();
 		Collaborators dependencies = new Collaborators(getBasePath(), dependenciesPath);
-		return new BatchStubRunnerFactory(stubRunnerOptions, dependencies).buildBatchStubRunner();
+		return new BatchStubRunnerFactory(stubRunnerOptions, dependencies)
+				.buildBatchStubRunner();
 	}
 
 	private void checkIfConfigurationIsPresent() {
@@ -74,7 +92,8 @@ public class StubRunnerAutoConfiguration {
 	private List<String> getDependenciesPaths() {
 		if (zookeeperDependencies != null) {
 			ArrayList<String> list = new ArrayList<>();
-			for (ZookeeperDependency dep : zookeeperDependencies.getDependencyConfigurations()) {
+			for (ZookeeperDependency dep : zookeeperDependencies
+					.getDependencyConfigurations()) {
 				list.add(dep.getPath());
 			}
 			return list;

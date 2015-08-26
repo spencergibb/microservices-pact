@@ -1,3 +1,4 @@
 # Auto Configuration
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+sample.stubrunner.CuratorTestingServerAutoConfiguration,\
 sample.stubrunner.StubRunnerAutoConfiguration

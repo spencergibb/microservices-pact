@@ -15,9 +15,9 @@ Testing is achieved using https://github.com/Codearte/accurest[AccuREST].
 2. Look at `fooprovider/build/generated-sources/accurest/sample/provider/FooproviderSpec.groovy` to see the accurest generated test.
 3. Look at `fooprovider/build/generated-sources/fooprovider-stubs/mappings/sample/fooprovider/shouldReturnFoo*.json` to see the accurest generated stubs.
 4. `./gradlew publishToMavenLocal -x test` this publishes the stubs to your local maven repository
-5. Run zookeeper (for now, option to run embedded). For those on a mac, `brew install zookeeper`, then `zkServer start`.
 6. Run `java -jar fooconsumer/build/libs/fooconsumer-0.0.1-SNAPSHOT.jar --stubrunner.enabled=true`
  * should see something like `2015-08-18 15:46:59.192  INFO 79118 --- [           main] com.ofg.stub.server.StubServer           : Started stub server for project sample/fooprovider on port 10057`
+ * to disable zookeeper set `curator.testingserver.enabled=false`
 7. Browse to http://localhost:8081/foos to see the service running using stubs located via Service Discovery
 
 == Interesting files
@@ -29,7 +29,7 @@ Testing is achieved using https://github.com/Codearte/accurest[AccuREST].
 
 == TODO
 
-- [ ] embed zookeeper
+- [x] embed zookeeper
 - [ ] move stubrunner to spring cloud
 - [ ] use spring restdocs to generate stubs
 - [ ] build plugins to create stub jar (to many moving parts right now).
