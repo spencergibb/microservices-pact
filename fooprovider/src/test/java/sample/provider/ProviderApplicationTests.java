@@ -11,8 +11,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 public class ProviderApplicationTests {
 
-    @Test
-    public void contextLoads() {
-    }
+	@Test
+	public void contextLoads() {
+	}
 
 }

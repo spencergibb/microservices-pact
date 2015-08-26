@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ConsumerApplication {
 
-    @Autowired
+	@Autowired
 	ConsumerService consumerService;
 
 	@RequestMapping("/foos")
@@ -27,12 +27,12 @@ public class ConsumerApplication {
 		return consumerService.foo();
 	}
 
-    @RequestMapping("/")
-    public String hello() {
-        return "Hello World!";
-    }
+	@RequestMapping("/")
+	public String hello() {
+		return "Hello World!";
+	}
 
-    public static void main(String[] args) {
-        SpringApplication.run(ConsumerApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(ConsumerApplication.class, args);
+	}
 }

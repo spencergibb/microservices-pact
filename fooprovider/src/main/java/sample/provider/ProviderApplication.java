@@ -17,17 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ProviderApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ProviderApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(ProviderApplication.class, args);
+	}
 
-    @RequestMapping(value = "/foo", method = RequestMethod.GET)
-    public ResponseEntity<Foo> foo() {
-        return new ResponseEntity<>(new Foo(42), HttpStatus.OK);
-    }
+	@RequestMapping(value = "/foo", method = RequestMethod.GET)
+	public ResponseEntity<Foo> foo() {
+		return new ResponseEntity<>(new Foo(42), HttpStatus.OK);
+	}
 
-    @RequestMapping(value = "/foos", method = RequestMethod.GET)
-    public ResponseEntity<List<Foo>> foos() {
-        return new ResponseEntity<>(Arrays.asList(new Foo(42), new Foo(100)), HttpStatus.OK);
-    }
+	@RequestMapping(value = "/foos", method = RequestMethod.GET)
+	public ResponseEntity<List<Foo>> foos() {
+		return new ResponseEntity<>(Arrays.asList(new Foo(42), new Foo(100)),
+				HttpStatus.OK);
+	}
 }
