@@ -35,17 +35,6 @@ allprojects {
         maven { url "https://repo.spring.io/milestone" }
     }
 
-
-    task loadVersion {
-        ext.myVersion = new File('number').text.trim()
-    }
-
-    task manifestFilter(type: Copy) {
-        from 'manifest.yml'
-        into 'versioned-manifest'
-        expand(version: "${loadVersion.myVersion}")
-    }
-
 }
 
 subprojects {
@@ -55,7 +44,7 @@ subprojects {
     apply plugin: 'accurest'
 
     group = 'sample'
-    version = new File('number').text.trim()
+    version = '0.0.1-SNAPSHOT'
 
     ext {
         contractsDir = new File("$projectDir/src/test/resources/stubs")
