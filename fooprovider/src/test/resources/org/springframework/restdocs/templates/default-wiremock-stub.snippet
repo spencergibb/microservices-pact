@@ -1,0 +1,15 @@
+{
+    "request": {
+        "method": "{{request.method}}",
+        "url": "{{request.path}}"
+    },
+    "response": {
+        "status": {{response.statusCode}},
+        "headers": {
+        {{#response.headers}}
+            "{{name}}": "{{value}}"
+        {{/response.headers}}
+        },
+        "body": "{{response.responseBody}}"
+    }
+}

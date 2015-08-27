@@ -16,6 +16,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "org.asciidoctor.convert" version "1.5.2"
+}
+
 apply plugin: "io.spring.dependency-management"
 
 dependencyManagement {
@@ -50,6 +54,7 @@ subprojects {
         contractsDir = new File("$projectDir/src/test/resources/stubs")
         wiremockStubsOutputDirRoot = file("${project.buildDir}/generated-sources/${project.name}-stubs")
         wiremockStubsOutputDir = new File(wiremockStubsOutputDirRoot, "mappings")
+        snippetsDir = file('build/generated-snippets')
     }
 
     //don't repackage the stubs jar
@@ -104,6 +109,21 @@ subprojects {
         compile("org.springframework.cloud:spring-cloud-starter-zookeeper-discovery:1.0.0.BUILD-SNAPSHOT")
         compile 'org.projectlombok:lombok:1.16.4'
         testCompile("org.springframework.boot:spring-boot-starter-test")
+        testCompile 'com.jayway.jsonpath:json-path'
+        //normally testCompile, but creating StubSnippet
+        compile 'org.springframework.restdocs:spring-restdocs:1.0.0.BUILD-SNAPSHOT'
+    }
+
+    test {
+        systemProperty 'org.springframework.restdocs.outputDir', snippetsDir
+        outputs.dir snippetsDir
+    }
+
+    asciidoctor {
+        sourceDir 'src/main/asciidoc' // Align with Maven's default location
+        attributes 'snippets': snippetsDir
+        inputs.dir snippetsDir
+        dependsOn test
     }
 
 }
@@ -128,7 +148,6 @@ project(':fooconsumer') {
     }
 }
 
-
 project(':fooprovider') {
     apply plugin: 'groovy'
 
@@ -149,8 +168,16 @@ project(':fooprovider') {
     }
     test.dependsOn { [generateAccurest, generateWireMockClientStubs] } //See: https://github.com/Codearte/accurest/issues/36
 
+    build.dependsOn { [copyFooStub] }
+
+    task copyFooStub(type: Copy) {
+        from "$snippetsDir/foo/"
+        into "$wiremockStubsOutputDir/sample/fooprovider/"
+        include "wiremock-stub.adoc"
+        rename('wiremock-stub.adoc', 'shouldReturnFoo.json')
+    }
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = '2.6'
 }
