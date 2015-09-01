@@ -179,6 +179,28 @@ project(':fooprovider') {
     }
 }
 
+project(':barprovider') {
+    apply plugin: 'groovy'
+
+    accurest {
+        testMode = 'MockMvc'
+        baseClassForTests = 'sample.provider.BaseMockMvcSpec'
+        basePackageForTests = 'sample.provider'
+        contractsDslDir = contractsDir
+        //stubsOutputDir = new File("${project.buildDir}/production/${project.name}-stubs/mappings/")
+        stubsOutputDir = wiremockStubsOutputDir
+    }
+
+    dependencies {
+        testCompile 'io.codearte.accurest:accurest-core:0.8.1'
+        testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+        testCompile 'com.jayway.restassured:rest-assured:2.4.0'
+        testCompile 'com.jayway.restassured:spring-mock-mvc:2.4.0' // needed if you're going to use Spring MockMvc
+    }
+    test.dependsOn { [generateAccurest, generateWireMockClientStubs] } //See: https://github.com/Codearte/accurest/issues/36
+
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.6'
 }

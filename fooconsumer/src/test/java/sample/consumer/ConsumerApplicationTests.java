@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ConsumerApplication.class)
-@WebIntegrationTest(randomPort = true)
+@WebIntegrationTest(/*value = "curator.testingserver.port=-1", */randomPort = true)
 @ActiveProfiles(BasicProfiles.SPRING_CLOUD)
 public class ConsumerApplicationTests {
 

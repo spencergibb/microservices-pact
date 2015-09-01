@@ -1,1 +1,1 @@
-include "fooconsumer", "fooprovider"
+include "fooconsumer", "fooprovider", "barprovider"

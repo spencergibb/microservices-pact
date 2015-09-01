@@ -7,9 +7,7 @@ import static org.springframework.restdocs.http.HttpDocumentation.httpRequest;
 import static org.springframework.restdocs.http.HttpDocumentation.httpResponse;
 import static org.springframework.restdocs.RestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.RestDocumentation.document;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.RestDocumentationRequestBuilders.get;
@@ -37,7 +35,7 @@ import sample.stubrunner.WiremockStubSnippet;
  * @author Spencer Gibb
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ProviderApplication.class)
+@SpringApplicationConfiguration(classes = FooProviderApplication.class)
 @WebAppConfiguration
 public class ApiDocumentation {
 

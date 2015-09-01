@@ -12,22 +12,33 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class ConsumerService {
 
-	@Value("${producer-url:http://fooprovider}")
-	private String url;
+	private static final ParameterizedTypeReference<List<Foo>> LIST_FOOS_TYPE = new ParameterizedTypeReference<List<Foo>>() { };
+
+	private static final ParameterizedTypeReference<List<Bar>> LIST_BARS_TYPE = new ParameterizedTypeReference<List<Bar>>() { };
+
+	@Value("${fooproducer-url:http://fooprovider}")
+	private String fooUrl;
+
+	@Value("${barproducer-url:http://barprovider}")
+	private String barUrl;
+
 	@Autowired(required = false)
 	private RestTemplate restTemplate = new RestTemplate();
 
-	public ConsumerService() {
-	}
+	public ConsumerService() { }
 
 	public List<Foo> foos() {
-		ParameterizedTypeReference<List<Foo>> responseType = new ParameterizedTypeReference<List<Foo>>() {
-		};
-		return restTemplate.exchange(url + "/foos", HttpMethod.GET, null, responseType)
+		return restTemplate.exchange(fooUrl + "/foos", HttpMethod.GET, null, LIST_FOOS_TYPE)
 				.getBody();
 	}
 
 	public Foo foo() {
-		return restTemplate.getForObject(url + "/foo", Foo.class);
+		return restTemplate.getForObject(fooUrl + "/foo", Foo.class);
 	}
+
+	public List<Bar> bars() {
+		return restTemplate.exchange(barUrl + "/bars", HttpMethod.GET, null, LIST_BARS_TYPE)
+				.getBody();
+	}
+
 }

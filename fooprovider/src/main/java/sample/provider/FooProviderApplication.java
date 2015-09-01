@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @EnableDiscoveryClient
 @RestController
-public class ProviderApplication {
+public class FooProviderApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProviderApplication.class, args);
+		SpringApplication.run(FooProviderApplication.class, args);
 	}
 
 	@RequestMapping(value = "/foo", method = RequestMethod.GET)

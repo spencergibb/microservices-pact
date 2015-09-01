@@ -6,6 +6,7 @@ spring:
     prefix: sample
     dependencies:
       fooprovider: ~
+      barprovider: ~
 
 stubrunner:
   work-offline: true

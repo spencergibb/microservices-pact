@@ -21,7 +21,7 @@ import com.ofg.config.BasicProfiles;
 public class ConsumerApplication {
 
 	@Autowired
-	ConsumerService consumerService;
+	private ConsumerService consumerService;
 
 	@RequestMapping("/foos")
 	public List<Foo> foos() {
@@ -31,6 +31,11 @@ public class ConsumerApplication {
 	@RequestMapping("/foo")
 	public Foo foo() {
 		return consumerService.foo();
+	}
+
+	@RequestMapping("/bars")
+	public List<Bar> bars() {
+		return consumerService.bars();
 	}
 
 	@RequestMapping("/")
