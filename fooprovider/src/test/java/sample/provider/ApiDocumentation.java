@@ -51,7 +51,8 @@ public class ApiDocumentation {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
 				.apply(documentationConfiguration()
 						.snippets()
-						.withDefaults(curlRequest(), httpRequest(), httpResponse(), new WiremockStubSnippet())
+						.withDefaults(curlRequest(), httpRequest(),
+								httpResponse(), new WiremockStubSnippet())
 				)
 				.build();
 	}

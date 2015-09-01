@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,5 +31,10 @@ public class ProviderApplication {
 	public ResponseEntity<List<Foo>> foos() {
 		return new ResponseEntity<>(Arrays.asList(new Foo(42), new Foo(100)),
 				HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/ping", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+	public String ping() {
+		return "OK";
 	}
 }

@@ -3,13 +3,19 @@ package sample.consumer;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import sample.microinfra.MicroInfraConfiguration;
+
+import com.ofg.config.BasicProfiles;
+
 @SpringBootApplication
+@Import(MicroInfraConfiguration.class)
 @EnableDiscoveryClient
 @RestController
 public class ConsumerApplication {
@@ -33,6 +39,8 @@ public class ConsumerApplication {
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(ConsumerApplication.class, args);
+		new SpringApplicationBuilder(ConsumerApplication.class)
+				.profiles(BasicProfiles.SPRING_CLOUD)
+				.run(args);
 	}
 }

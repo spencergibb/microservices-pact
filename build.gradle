@@ -143,7 +143,8 @@ project(':fooconsumer') {
     }
 
     dependencies {
-        compile "com.ofg:stub-runner-spring:0.9.4-SNAPSHOT"
+        compile "com.ofg:stub-runner-spring:0.9.5-SNAPSHOT"
+        compile "com.ofg:micro-infra-spring-base:0.9.5-SNAPSHOT"
         compile "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
     }
 }
