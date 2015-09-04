@@ -105,4 +105,9 @@ public class StubRunnerAutoConfiguration {
 		return (!workOffline) && skipLocalRepo;
 	}
 
+	@Bean
+	public StubRunnerEndpoint stubRunnerEndpoint() {
+		return new StubRunnerEndpoint();
+	}
+
 }
